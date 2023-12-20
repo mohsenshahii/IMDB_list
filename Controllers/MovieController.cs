@@ -1,4 +1,6 @@
-﻿using System;
+﻿using IMDB_list.DATA;
+using IMDB_list.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +13,13 @@ namespace IMDB_list.Controllers
         // GET: Movie
         public ActionResult Index()
         {
-            return View();
+            List<MoviesModel> movies = new List<MoviesModel>();
+
+            MovieDAO movieDAO = new MovieDAO();
+
+            movies = movieDAO.FetchAll();
+            
+            return View("Index", movies);
         }
     }
 }
