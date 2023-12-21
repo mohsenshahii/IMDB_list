@@ -13,13 +13,21 @@ namespace IMDB_list.Controllers
         // GET: Movie
         public ActionResult Index()
         {
-            List<MoviesModel> movies = new List<MoviesModel>();
-
             MovieDAO movieDAO = new MovieDAO();
 
-            movies = movieDAO.FetchAll();
+            List<MoviesModel> movies = movieDAO.FetchAll();
             
             return View("Index", movies);
+        }
+
+        public ActionResult Details(int index)
+        {
+            MovieDAO movieDAO = new MovieDAO();
+
+            MoviesModel movie = movieDAO.FetchOne(index);
+
+            return View("Details", movie);
+
         }
     }
 }

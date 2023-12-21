@@ -11,6 +11,9 @@ namespace IMDB_list.DATA
     internal class MovieDAO
     {
         private string connectionString = @"Data Source=(localdb)\ProjectModels;Initial Catalog=IMDB_LIST;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+
+
         public List<MoviesModel> FetchAll()
         {
             List<MoviesModel> returnlist = new List<MoviesModel>();
@@ -30,13 +33,13 @@ namespace IMDB_list.DATA
 
                         MoviesModel movie = new MoviesModel
                         {
-                            index = reader.GetInt32(0),
-                            id = reader.GetString(1),
-                            title = reader.GetString(2),
-                            description = reader.GetString(4),
-                            release_year = reader.GetInt32(5),
-                            runtime = reader.GetInt32(7),
-                            imdb_score = reader.GetDouble(9),
+                            Index = reader.GetInt32(0),
+                            Id = reader.GetString(1),
+                            Title = reader.GetString(2),
+                            Description = reader.GetString(4),
+                            Release_year = reader.GetInt32(5),
+                            Runtime = reader.GetInt32(7),
+                            Imdb_score = reader.GetDouble(9),
                         };
 
                         returnlist.Add(movie);
@@ -45,6 +48,42 @@ namespace IMDB_list.DATA
                 }
 
                 return returnlist;
+            }
+        }
+
+
+
+        public MoviesModel FetchOne(int Index)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string sqlQuery = "SELECT * FROM dbo.imdb WHERE [index] = @Index";
+
+                SqlCommand command = new SqlCommand(sqlQuery, connection);
+
+                command.Parameters.Add("@Index", System.Data.SqlDbType.Int).Value = Index;
+
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                MoviesModel movie = new MoviesModel();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        movie.Index = reader.GetInt32(0);
+                        movie.Id = reader.GetString(1);
+                        movie.Title = reader.GetString(2);
+                        movie.Description = reader.GetString(4);
+                        movie.Release_year = reader.GetInt32(5);
+                        movie.Runtime = reader.GetInt32(7);
+                        movie.Imdb_score = reader.GetDouble(9);
+                    }
+
+                }
+                return movie;
             }
         }
     }
