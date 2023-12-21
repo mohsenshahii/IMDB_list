@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 
 namespace IMDB_list.DATA
@@ -13,7 +14,7 @@ namespace IMDB_list.DATA
         private string connectionString = @"Data Source=(localdb)\ProjectModels;Initial Catalog=IMDB_LIST;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
 
-
+        // Fetch all data 
         public List<MoviesModel> FetchAll()
         {
             List<MoviesModel> returnlist = new List<MoviesModel>();
@@ -52,7 +53,7 @@ namespace IMDB_list.DATA
         }
 
 
-
+        // Fetch one recoed 
         public MoviesModel FetchOne(int Index)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -84,6 +85,31 @@ namespace IMDB_list.DATA
 
                 }
                 return movie;
+            }
+        }
+
+
+        // Create new object
+        public int Create(MoviesModel movie)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string sqlQuery = "INSERT INTO dbo.imdb (id, title, description, release_year, runtime, imdb_score) VALUES (@id, @title, @description, @release_year, @runtime, @imdb_score)";
+
+                SqlCommand command = new SqlCommand(sqlQuery, connection);
+
+                command.Parameters.Add("@id", System.Data.SqlDbType.VarChar, 20).Value = movie.Id;
+                command.Parameters.Add("@title", System.Data.SqlDbType.VarChar, 100).Value = movie.Title;
+                command.Parameters.Add("@description", System.Data.SqlDbType.VarChar, 1000).Value = movie.Description;
+                command.Parameters.Add("@release_year", System.Data.SqlDbType.Int).Value = movie.Release_year;
+                command.Parameters.Add("@runtime", System.Data.SqlDbType.Int).Value = movie.Runtime;
+                command.Parameters.Add("@imdb_score", System.Data.SqlDbType.Float).Value = movie.Imdb_score;
+
+                connection.Open();
+
+                int index = command.ExecuteNonQuery();
+
+                return index;
             }
         }
     }
