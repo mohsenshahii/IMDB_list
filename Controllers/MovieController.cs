@@ -3,6 +3,7 @@ using IMDB_list.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
@@ -28,6 +29,19 @@ namespace IMDB_list.Controllers
 
             return View("Details", movie);
 
+        }
+
+
+        public ActionResult Create() 
+        {
+            return View("MovieForm");
+        }
+
+        public ActionResult ProcessCreate(MoviesModel movie) 
+        {
+            MovieDAO movieDAO = new MovieDAO();
+            movieDAO.Create(movie);
+            return View("Details", movie);
         }
     }
 }
