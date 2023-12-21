@@ -13,9 +13,6 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Index)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.Title)
         </th>
         <th>
@@ -36,14 +33,12 @@
 @foreach (var item in Model) {
     <tr>
 
+
         <td>
-            @Html.DisplayFor(modelItem => item.Index)
+            @Html.DisplayFor(modelItem => item.Title)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Index)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
+            @Html.ActionLink("Read More" ,"Details" , new { Index = item.Index })
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Release_year)
@@ -55,8 +50,8 @@
             @Html.DisplayFor(modelItem => item.Imdb_score)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { Index = item.Index }) |
-            @Html.ActionLink("Details", "Details", new { Index = item.Index }) |
+            @Html.ActionLink("Edit", "Edit", new { Index = item.Index }) 
+            @Html.ActionLink("Details", "Details", new { Index = item.Index }) 
             @Html.ActionLink("Delete", "Delete", new { Index = item.Index })
         </td>
     </tr>
