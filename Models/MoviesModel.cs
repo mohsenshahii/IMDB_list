@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -9,16 +11,24 @@ namespace IMDB_list.Models
     {
         public int Index { get; set; }
 
+        [Required]
         public string Id { get; set; }
 
+
+        [Required]
         public string Title { get; set; }
 
+        [Required]
         public string Description { get; set; }
 
+        [Required]
+        [DisplayName("Year of release")]
         public int Release_year { get; set; }
+
 
         public int Runtime { get; set; }
 
+        
         public double Imdb_score { get; set; }
 
         public MoviesModel()
