@@ -21,6 +21,18 @@ namespace IMDB_list.Controllers
             return View("Index", movies);
         }
 
+        public ActionResult Delete(int index)
+        {
+            MovieDAO movieDAO = new MovieDAO();
+
+            movieDAO.Delete(index);
+
+            List<MoviesModel> movies = movieDAO.FetchAll();
+
+            return View("Index", movies);
+
+        }
+
         public ActionResult Details(int index)
         {
             MovieDAO movieDAO = new MovieDAO();
@@ -34,13 +46,25 @@ namespace IMDB_list.Controllers
 
         public ActionResult Create() 
         {
-            return View("MovieForm");
+            MoviesModel movie = new MoviesModel();
+            return View("MovieForm", movie);
+        }
+
+
+        public ActionResult Edit(int index)
+        {
+            MovieDAO movieDAO = new MovieDAO();
+
+            MoviesModel movie = movieDAO.FetchOne(index);
+
+            return View("MovieForm", movie);
+
         }
 
         public ActionResult ProcessCreate(MoviesModel movie) 
         {
             MovieDAO movieDAO = new MovieDAO();
-            movieDAO.Create(movie);
+            movieDAO.CreateOrUpdate(movie);
             return View("Details", movie);
         }
     }
