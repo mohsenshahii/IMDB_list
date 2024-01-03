@@ -90,14 +90,24 @@ namespace IMDB_list.DATA
 
 
         // Create new object
-        public int Create(MoviesModel movie)
+        public int CreateOrUpdate(MoviesModel movie)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sqlQuery = "INSERT INTO dbo.imdb (id, title, description, release_year, runtime, imdb_score) VALUES (@id, @title, @description, @release_year, @runtime, @imdb_score)";
+                string sqlQuery = "";
+
+                if(movie.Index <= 0)
+                {
+                    sqlQuery = "INSERT INTO dbo.imdb (id, title, description, release_year, runtime, imdb_score) VALUES (@id, @title, @description, @release_year, @runtime, @imdb_score)";
+                }
+                else
+                {
+                    sqlQuery = "UPDATE dbo.imdb SET id = @id, title = @title, description = @description, release_year = @release_year, runtime = @runtime, imdb_score = @imdb_score WHERE [index] = @index";
+                }
 
                 SqlCommand command = new SqlCommand(sqlQuery, connection);
 
+                command.Parameters.Add("@index", System.Data.SqlDbType.Int, 20).Value = movie.Index;
                 command.Parameters.Add("@id", System.Data.SqlDbType.VarChar, 20).Value = movie.Id;
                 command.Parameters.Add("@title", System.Data.SqlDbType.VarChar, 100).Value = movie.Title;
                 command.Parameters.Add("@description", System.Data.SqlDbType.VarChar, 1000).Value = movie.Description;
@@ -110,6 +120,25 @@ namespace IMDB_list.DATA
                 int index = command.ExecuteNonQuery();
 
                 return index;
+            }
+        }
+
+        internal int Delete(int index)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string sqlQuery = "DELETE FROM dbo.imdb WHERE [index] = @index";
+                
+                SqlCommand command = new SqlCommand(sqlQuery, connection);
+
+                command.Parameters.Add("@index", System.Data.SqlDbType.Int, 20).Value = index;
+            
+                connection.Open();
+
+                int deletedId = command.ExecuteNonQuery();
+
+                return deletedId;
+            
             }
         }
     }
