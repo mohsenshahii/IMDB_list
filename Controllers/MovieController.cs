@@ -61,11 +61,26 @@ namespace IMDB_list.Controllers
 
         }
 
-        public ActionResult ProcessCreate(MoviesModel movie) 
+        public ActionResult ProcessCreate(MoviesModel movie)
         {
             MovieDAO movieDAO = new MovieDAO();
             movieDAO.CreateOrUpdate(movie);
             return View("Details", movie);
         }
+
+        public ActionResult SearchForm()
+        {
+            return View("SearchForm");
+        }
+         
+        public ActionResult SearchForName(string searchPhrase)
+        {
+            MovieDAO movieDAO = new MovieDAO();
+            List<MoviesModel> searchResults = movieDAO.SearchForName(searchPhrase);
+            return View("Index", searchResults);
+        }
+
+
+
     }
 }
