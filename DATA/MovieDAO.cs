@@ -141,5 +141,43 @@ namespace IMDB_list.DATA
             
             }
         }
+
+        internal List<MoviesModel> SearchForName(string searchPhrase)
+        {
+            List<MoviesModel> returnlist = new List<MoviesModel>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string sqlQuery = "SELECT * FROM dbo.imdb WHERE title LIKE @searchForME";
+                SqlCommand command = new SqlCommand(sqlQuery, connection);
+                command.Parameters.Add("@searchForMe", System.Data.SqlDbType.NVarChar, 1000).Value = "%"+searchPhrase+"%";
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+
+                        MoviesModel movie = new MoviesModel
+                        {
+                            Index = reader.GetInt32(0),
+                            Id = reader.GetString(1),
+                            Title = reader.GetString(2),
+                            Description = reader.GetString(4),
+                            Release_year = reader.GetInt32(5),
+                            Runtime = reader.GetInt32(7),
+                            Imdb_score = reader.GetDouble(9),
+                        };
+
+                        returnlist.Add(movie);
+                    }
+
+                }
+
+                return returnlist;
+            }
+        }
     }
 }
